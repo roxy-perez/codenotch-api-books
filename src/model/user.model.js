@@ -21,7 +21,8 @@ const User = sequelize.define('User', {
     },
     photo: {
         type: DataTypes.STRING(200),
-        allowNull: false
+        allowNull: true,
+        defaultValue: ''
     }
 },
 
