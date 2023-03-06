@@ -20,6 +20,11 @@ const Book = sequelize.define('Book', {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false
     },
+    cover: {
+        type: DataTypes.STRING(200),
+        allowNull: true,
+        defaultValue: 'Tapa blanda'
+    },
     photo: {
         type: DataTypes.STRING(200),
         allowNull: true,
