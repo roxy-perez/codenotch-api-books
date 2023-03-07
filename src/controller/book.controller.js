@@ -17,8 +17,8 @@ const getBooks = async (req, res) => {
 
 
 const getBook = async (req, res) => {
-    const book_id = req.query.book_id;
-    const user_id = req.query.user_id;
+    const user_id = req.params.user_id;
+    const book_id = req.params.book_id;
 
     try {
         const book = await Book.findOne({
@@ -29,6 +29,12 @@ const getBook = async (req, res) => {
             status: 200,
             body: book
         });
+
+        if(res.body === null){
+            res.json({
+                message: "El usuario no tiene libros que mostrar"
+            });  
+        }
 
     } catch (error) {
         return res.status(500).json({ message: error.message });
