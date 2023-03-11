@@ -1,4 +1,6 @@
 const User = require('../model/user.model');
+const { QueryTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
 const getUsers = async (req, res) => {
     try {
@@ -6,7 +8,7 @@ const getUsers = async (req, res) => {
         res.status(200).json({
             ok: true,
             status: 200,
-            body: users
+            message: users
         });
 
     } catch (error) {
@@ -24,7 +26,7 @@ const getUser = async (req, res) => {
         res.status(200).json({
             ok: true,
             status: 200,
-            body: user
+            message: user
         });
 
     } catch (error) {
@@ -33,13 +35,14 @@ const getUser = async (req, res) => {
 }
 
 const createUser = async (req, res) => {
-    const { name, surname, email, photo } = req.body;
+    const { name, surname, email, url } = req.body;
+    console.log(req.body)
     try {
         const newUser = await User.create({
             name,
             surname,
             email,
-            photo
+            photo: url
         });
         res.status(201).json({
             ok: true,
@@ -69,7 +72,7 @@ const updateUser = async (req, res) => {
         res.status(200).json({
             ok: true,
             status: 200,
-            body: user
+            message: user
         });
 
     } catch (error) {
@@ -94,12 +97,17 @@ const deleteUser = async (req, res) => {
 const loginUser = async (req, res) => {
     try {
         const { email } = req.body;
-        const user = await User.findOne({ where: { email } });
+        const user = await sequelize.query(
+            'SELECT * FROM `users` WHERE email = :email', {
+            replacements: { email: email },
+            type: QueryTypes.SELECT,
+        }, { limit: 1 } );
+
         if (user) {
             res.status(200).json({
                 ok: true,
                 status: 200,
-                body: user
+                user: user
             });
         } else {
             res.status(404).json({
@@ -107,7 +115,7 @@ const loginUser = async (req, res) => {
             });
         }
     } catch (error) {
-
+        return res.status(500).json({ message: error.message });
     }
 }
 

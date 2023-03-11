@@ -7,7 +7,7 @@ const getBooks = async (req, res) => {
         res.status(200).json({
             ok: true,
             status: 200,
-            body: books
+            books: books
         });
 
     } catch (error) {
@@ -27,7 +27,7 @@ const getBook = async (req, res) => {
         res.status(200).json({
             ok: true,
             status: 200,
-            body: book
+            book: book
         });
 
         if(res.body === null){
@@ -55,7 +55,7 @@ const createBook = async (req, res) => {
         res.status(201).json({
             ok: true,
             status: 201,
-            message: newBook
+            book: newBook
         });
 
     } catch (error) {
