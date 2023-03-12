@@ -1,7 +1,8 @@
 const Book = require('../model/book.model');
 
 const getBooks = async (req, res) => {
-    const user_id = req.query.user_id;
+    let user_id = req.query.user_id;
+    if (!user_id) user_id = 1;
     try {
         const books = await Book.findAll({ where: { user_id } });
         res.status(200).json({
@@ -17,12 +18,13 @@ const getBooks = async (req, res) => {
 
 
 const getBook = async (req, res) => {
-    const user_id = req.params.user_id;
+    let user_id = req.params.user_id;
     const book_id = req.params.book_id;
+    if (!user_id) user_id = 1;
 
     try {
         const book = await Book.findOne({
-            where: { user_id, book_id  }
+            where: { user_id, book_id }
         });
         res.status(200).json({
             ok: true,
@@ -30,10 +32,10 @@ const getBook = async (req, res) => {
             book: book
         });
 
-        if(res.body === null){
+        if (res.body === null) {
             res.json({
                 message: "El usuario no tiene libros que mostrar"
-            });  
+            });
         }
 
     } catch (error) {
@@ -42,7 +44,8 @@ const getBook = async (req, res) => {
 }
 
 const createBook = async (req, res) => {
-    const { user_id, title, author, price, cover,  photo } = req.body;
+    let { user_id, title, author, price, cover, photo } = req.body;
+    if (!user_id) user_id = 1;
     try {
         const newBook = await Book.create({
             user_id,
